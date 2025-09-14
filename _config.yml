@@ -1,0 +1,56 @@
+title: "Academic"
+description: "Rencana Studi ..."
+
+# remote_theme: pages-themes/minimal@v0.2.0
+# remote_theme: just-the-docs/just-the-docs
+# remote_theme: squidfunk/mkdocs-material
+# remote_theme: pages-themes/minimal@v0.2.0      # Clean, sidebar layout
+# remote_theme: pages-themes/architect@v0.2.0    # Bold header design
+# remote_theme: pages-themes/cayman@v0.2.0       # Gradient header
+# remote_theme: pages-themes/dinky@v0.2.0        # Compact design
+# remote_theme: pages-themes/hacker@v0.2.0       # Terminal/green theme
+# remote_theme: pages-themes/leap-day@v0.2.0     # Modern with sidebar
+# remote_theme: pages-themes/merlot@v0.2.0       # Wine-colored theme
+# remote_theme: pages-themes/midnight@v0.2.0     # Dark theme
+remote_theme: pages-themes/modernist@v0.2.0    # Clean, modern
+# remote_theme: pages-themes/slate@v0.2.0        # Dark with header
+# remote_theme: pages-themes/tactile@v0.2.0      # Textured header
+# remote_theme: pages-themes/time-machine@v0.2.0   # Retro sci-fi
+# remote_theme: just-the-docs/just-the-docs        # Excellent for documentation
+# remote_theme: squidfunk/mkdocs-material          # Material Design inspired
+# remote_theme: alshedivat/al-folio                # Academic/research theme
+# remote_theme: mmistakes/minimal-mistakes         # Portfolio/blog theme
+# remote_theme: jekyll/minima                      # Simple, fast blog theme
+
+plugins:
+  - jekyll-remote-theme
+  - jekyll-seo-tag
+  - jekyll-readme-index
+
+readme_index:
+  enabled: true
+  remove_originals: false
+
+# Di front matter post/page
+toc: true
+toc_label: "Contents"
+toc_icon: "cog"
+toc_sticky: true
+
+# SEO dan metadata
+logo: "/img/UBCrest.png"
+logo_width: 100px
+favicon: "/img/UBakrie2.ico"
+
+# Social media icons
+social:
+  name: "My Project"
+  links:
+    - "https://github.com/ipgub/acad"
+    - "https://www.instagram.com/ipg.tif/"
+
+markdown: kramdown
+highlighter: rouge
+
+head_custom: |
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
