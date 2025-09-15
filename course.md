@@ -17,7 +17,7 @@ layout: default
 
 ---
 
-## **ABOUT THIS DOCUMENTt**
+## **ABOUT THIS DOCUMENT**
 
 This is a *short guidance* for the Computer Vision course (TIF456), academic year of 2025-2026.
 
@@ -163,13 +163,13 @@ Plans for the semester:
 
 ## **NEXT STEPS**
 
-### **Before Week 1**
+### **Before Week 2**
 1. **Install Python and OpenCV** (test with simple script)
 2. **Get textbook** or access online resources
 3. **Bring smartphone/camera** to next class
 4. **Review basic image concepts** from Multimedia Systems
 
-### **Week 1 Preview**
+### **Week 2 Preview**
 - **Topic**: Image Acquisition and Camera Systems
 - **Activity**: Hands-on camera parameter exploration
 - **Assignment**: Basic image analysis project
