@@ -2,9 +2,8 @@
 layout: default
 ---
 
-# Week 2: Image Acquisition and Camera Systems
-### Computer Vision Course - TIF-XXX
-
+# Week 2: Image Acquisition and Formation
+{: .no_toc .text-delta }
 
 **Author:** *Irwan Prasetya Gunawan* \
 **Contact:** [irwan.gunawan@bakrie.ac.id](mailto:irwan.gunawan@bakrie.ac.id) / [irwan@ieee.org](mailto:irwan@ieee.org) \
