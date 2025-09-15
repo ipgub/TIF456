@@ -23,6 +23,6 @@ Welcome to the main page of TIF456 - Computer Vision repository page.
   - Fundamentals of image
 
 ## Grading Components
-	- Assignments
-	- Midterm Examination
-	- Final Examination
+- Assignments
+- Midterm Examination
+- Final Examination
