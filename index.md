@@ -3,38 +3,26 @@ layout: default
 title: Home
 ---
 
-# Bimbingan Akademik
+# TIF456 - Computer Vision
 {: .no_toc .text-delta }
 
-Selamat datang di halaman utama bimbingan akademik.
+Welcome to the main page of TIF456 - Computer Vision repository page.
 
-## Daftar Isi
+## Table of Content
 {: .no_toc .text-delta }
 
 * TOC
 {:toc}
 
 
-## Perencanaan Studi
-  - Panduan dan Prosedur [Konsultasi KRS](KRS.md){:target="_blank"}
-  - Penyusunan rencana studi - merencanakan mata kuliah per semester
-  - Pemilihan mata kuliah - rekomendasi mata kuliah yang sesuai dengan minat dan kemampuan
-  - Perencanaan target IPK - menetapkan target prestasi akademik
+## Materials
+  - Introduction to the [course](KRS.md){:target="_blank"}
+  - Image acquisition
   
-## Monitoring dan Evaluasi Studi
-  - Pemantauan kemajuan studi - mengecek progress SKS, IPK, dan masa studi
-  - Evaluasi hasil belajar - menganalisis nilai dan prestasi per semester
-  - Identifikasi masalah akademik - mendeteksi kesulitan belajar atau hambatan
-  - Tindak lanjut perbaikan - memberikan solusi untuk masalah yang ditemukan
+## Notebooks
+  - Fundamentals of image
 
-## Konseling
-  - Konsultasi akademik
-  - Bimbingan motivasi
-  - Manajemen waktu
-  - Stress management
-
-## Tugas Akhir
-  - Bimbingan pemilihan topik
-  - Penulisan proposal
-  - Pelaksanaan penelitian
- 
+## Grading Components
+	- Assignments
+	- Midterm Examination
+	- Final Examination
