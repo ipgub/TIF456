@@ -2,7 +2,7 @@
 layout: default
 ---
 
-# Course
+# Week 1: Introduction to the Course
 {: .no_toc .text-delta }
 
 **Author:** *Irwan Prasetya Gunawan* \
