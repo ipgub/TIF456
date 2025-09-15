@@ -2,9 +2,20 @@
 layout: default
 ---
 
-
 # Week 2: Image Acquisition and Camera Systems
 ### Computer Vision Course - TIF-XXX
+
+
+**Author:** *Irwan Prasetya Gunawan* \
+**Contact:** [irwan.gunawan@bakrie.ac.id](mailto:irwan.gunawan@bakrie.ac.id) / [irwan@ieee.org](mailto:irwan@ieee.org) \
+**Published Date:** 15 September 2025
+
+## Table of Contents
+{: .no_toc .text-delta }
+
+* TOC
+{:toc}
+
 
 ---
 
@@ -98,7 +109,7 @@ By the end of this lecture, students will be able to:
 
 ---
 
-## **SIMPLIFIED ASSIGNMENT**
+## **PLANNED ASSIGNMENT**
 
 ### **Image Acquisition Mini-Project**
 **Duration**: 1 week | **Weight**: 5% of course grade
@@ -177,12 +188,12 @@ contrast = np.std(gray)
 
 ---
 
-## **PREPARATION FOR WEEK 2**
+## **PREPARATION FOR WEEK 3**
 
 ### **What's Next**
 - **Advanced Image Processing**: Building on acquisition knowledge
 - **Edge detection and filtering**: Using quality images for better results
-- **Assignment connection**: Use Week 1 images for Week 2 processing
+- **Assignment connection**: Use Week 2 images for Week 3 processing
 
 ### **Self-Check Questions**
 1. What camera settings would you use for outdoor vs indoor photography?
@@ -191,26 +202,6 @@ contrast = np.std(gray)
 
 ---
 
-## **INSTRUCTOR NOTES**
 
-### **Time Management**
-- **Theory sections**: 15 minutes each - stick to schedule
-- **Demos**: Essential for understanding - don't skip
-- **Student questions**: Save complex ones for after class
-
-### **Common Issues**
-- **Mathematical concepts**: Keep simple, focus on intuition
-- **Programming anxiety**: Reassure beginners, provide support
-- **Equipment problems**: Have backup plans and examples ready
-
-### **Success Indicators**
-- Students can explain sensor differences
-- Students understand parameter trade-offs
-- Students can run basic OpenCV operations
-- Students connect acquisition to CV applications
-
----
-
-**Course**: Computer Vision (TIF-XXX)  
+**Course**: Computer Vision (TIF456)  
 **Academic Year**: 2025/2026  
-**Version**: Simplified
