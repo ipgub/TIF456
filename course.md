@@ -15,7 +15,9 @@ layout: default
 * TOC
 {:toc}
 
-## About this document
+---
+
+## **ABOUT THIS DOCUMENTt**
 
 This is a *short guidance* for the Computer Vision course (TIF456), academic year of 2025-2026.
 
