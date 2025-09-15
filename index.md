@@ -16,7 +16,7 @@ Welcome to the main page of TIF456 - Computer Vision repository page.
 
 
 ## Materials
-  - Introduction to the [course](KRS.md){:target="_blank"}
+  - Introduction to the [course](course.md){:target="_blank"}
   - Image acquisition
   
 ## Notebooks
