@@ -15,50 +15,58 @@ layout: default
 * TOC
 {:toc}
 
-
-
 ---
 
 ## **Assignment Overview**
 
-This assignment focuses on implementing and analyzing various image filtering techniques that form the foundation of computer vision. You will work with classical image processing algorithms including spatial filtering, edge detection, and morphological operations. The goal is to understand how these fundamental techniques work and their applications in computer vision systems.
+This assignment focuses on implementing and analyzing basic image filtering techniques that form the foundation of computer vision. You will work with spatial filtering and edge detection algorithms using images captured from your own camera. The goal is to understand how these fundamental techniques work through hands-on implementation.
 
-## **Learning Objectives**
+## Learning Objectives
 
 By completing this assignment, you will be able to:
 - Implement basic spatial filtering operations from scratch
 - Apply and compare different edge detection algorithms
-- Understand morphological operations and their applications
-- Analyze the effectiveness of different filtering techniques
+- Understand the mathematical foundations of image convolution
 - Develop practical skills with OpenCV and image processing
+- Analyze filtering effects on real-world images
 
-## **Technical Requirements**
+## Technical Requirements
 
-### **Environment Setup**
+### Environment Setup
 - **Platform**: Google Colab (free tier sufficient)
 - **Programming Language**: Python 3.x
 - **Required Libraries**: 
   - OpenCV (`cv2`)
   - NumPy (`numpy`)
   - Matplotlib (`matplotlib.pyplot`)
-  - SciPy (`scipy`)
 
-### **Dataset**
-You will work with the provided test images:
-1. **Natural Image**: High-resolution color photograph
-2. **Document Image**: Scanned text document
-3. **Medical Image**: X-ray or MRI scan (grayscale)
-4. **Noisy Image**: Image with added noise for filtering tests
+### Dataset - Your Own Images
+You will capture and use your own images for this assignment:
 
-*Download links will be provided in the assignment announcement.*
+**Required Images (minimum 3):**
+1. **Portrait/Face Image**: Clear photo of a person (yourself or friend with permission)
+2. **Text/Document**: Photo of a book page, handwritten notes, or printed document
+3. **Outdoor Scene**: Landscape, building, or street scene with various edges and textures
+
+**Image Requirements:**
+- **Resolution**: At least 640x480 pixels
+- **Format**: JPG or PNG
+- **Quality**: Clear, well-lit images (avoid blurry photos)
+- **Content**: Images should have visible edges, textures, and details for filtering analysis
+
+**Capture Guidelines:**
+- Use your smartphone or camera
+- Ensure good lighting conditions
+- Avoid excessive shadows or overexposure
+- Include variety in content (faces, text, natural scenes)
 
 ---
 
-## **Assignment Tasks**
+## Assignment Tasks
 
-### **Part 1: Basic Spatial Filtering (25 points)**
+### **Part 1: Basic Spatial Filtering (40 points)**
 
-#### Task 1.1: Implement Convolution Operation (10 points)
+#### Task 1.1: Implement Convolution Operation (15 points)
 Create a function that performs 2D convolution without using built-in OpenCV functions.
 
 ```python
@@ -67,9 +75,9 @@ def custom_convolution(image, kernel, padding='zero'):
     Implement 2D convolution operation
     
     Parameters:
-    - image: Input image (2D numpy array)
+    - image: Input image (2D numpy array for grayscale)
     - kernel: Convolution kernel (2D numpy array)
-    - padding: Padding method ('zero', 'reflect', 'constant')
+    - padding: Padding method ('zero', 'constant')
     
     Returns:
     - filtered_image: Convolution result
@@ -79,297 +87,322 @@ def custom_convolution(image, kernel, padding='zero'):
 ```
 
 **Requirements:**
-- Handle different padding methods
-- Support both grayscale and color images
+- Handle zero padding and constant padding
+- Support grayscale images (convert your color images to grayscale)
+- Test with simple 3x3 kernels first
 - Compare results with OpenCV's `cv2.filter2D()`
 
-#### Task 1.2: Basic Filtering Operations (15 points)
-Implement and apply the following filters:
+**Testing:**
+- Apply your function to a simple 3x3 averaging kernel
+- Verify correctness by comparing with OpenCV results
+- Show side-by-side comparison of original vs filtered image
 
-1. **Gaussian Blur**
-   - Create Gaussian kernels of different sizes (3x3, 5x5, 7x7)
-   - Apply to remove noise from the noisy test image
+#### Task 1.2: Basic Filtering Operations (25 points)
+Implement and apply the following filters to your captured images:
+
+1. **Gaussian Blur Filter (10 points)**
+   ```python
+   def gaussian_kernel(size, sigma):
+       """Create a Gaussian kernel"""
+       # Your implementation here
+       pass
+   
+   def apply_gaussian_blur(image, kernel_size, sigma):
+       """Apply Gaussian blur using your convolution function"""
+       # Your implementation here
+       pass
+   ```
+   - Create Gaussian kernels of sizes 5x5 and 9x9
+   - Apply to your portrait image to create blur effect
    - Compare with OpenCV's `cv2.GaussianBlur()`
 
-2. **Box Filter**
-   - Implement simple averaging filter
-   - Test different kernel sizes
-   - Analyze the smoothing effect
-
-3. **Unsharp Masking**
-   - Implement image sharpening using unsharp mask technique
-   - Formula: `sharpened = original + α * (original - blurred)`
-   - Test different α values
-
-**Deliverables:**
-- Implementation of all three filters
-- Comparative analysis with visual results
-- Discussion of when to use each filter type
-
-### **Part 2: Edge Detection Algorithms (30 points)**
-
-#### Task 2.1: Gradient-Based Edge Detection (15 points)
-Implement the following edge detection methods:
-
-1. **Sobel Edge Detector**
+2. **Box Filter (Averaging) (8 points)**
    ```python
-   def sobel_edge_detection(image, direction='both'):
+   def box_filter(image, kernel_size):
+       """Apply box filter for smoothing"""
+       # Your implementation here
+       pass
+   ```
+   - Implement simple averaging filter with 3x3 and 5x5 kernels
+   - Apply to your document image
+   - Analyze the smoothing effect on text clarity
+
+3. **Unsharp Masking (7 points)**
+   ```python
+   def unsharp_mask(image, sigma, alpha):
+       """
+       Implement image sharpening using unsharp mask
+       Formula: sharpened = original + α * (original - blurred)
+       """
+       # Your implementation here
+       pass
+   ```
+   - Test with different α values (0.5, 1.0, 2.0)
+   - Apply to your outdoor scene image
+   - Show the sharpening effect on edges and details
+
+**Deliverables for Part 1:**
+- Working implementations of all functions
+- Visual results showing before/after filtering
+- Brief analysis of each filter's effect on different image types
+
+### **Part 2: Edge Detection Algorithms (60 points)**
+
+#### Task 2.1: Gradient-Based Edge Detection (35 points)
+
+1. **Sobel Edge Detector (15 points)**
+   ```python
+   def sobel_edge_detection(image):
        """
        Implement Sobel edge detection
        
        Parameters:
        - image: Input grayscale image
-       - direction: 'horizontal', 'vertical', or 'both'
        
        Returns:
-       - edges: Edge magnitude image
-       - direction_map: Edge direction map (for 'both')
+       - magnitude: Edge magnitude image
+       - direction: Edge direction image
        """
+       # Sobel kernels
+       sobel_x = np.array([[-1, 0, 1], [-2, 0, 2], [-1, 0, 1]])
+       sobel_y = np.array([[-1, -2, -1], [0, 0, 0], [1, 2, 1]])
+       
        # Your implementation here
        pass
    ```
+   - Apply Sobel operator to detect edges in your images
+   - Calculate both magnitude and direction of gradients
+   - Display results with proper visualization
 
-2. **Prewitt Edge Detector**
-   - Similar to Sobel but with different kernels
-   - Compare results with Sobel detector
-
-3. **Roberts Cross-Gradient**
-   - Implement the simple 2x2 gradient operator
-   - Analyze performance on different image types
-
-**Requirements:**
-- Implement from scratch using your convolution function
-- Calculate both magnitude and direction of gradients
-- Compare with OpenCV implementations
-
-#### Task 2.2: Canny Edge Detection (15 points)
-Implement a simplified version of the Canny edge detector:
-
-```python
-def canny_edge_detection(image, low_threshold, high_threshold, sigma=1.0):
-    """
-    Simplified Canny edge detection implementation
-    
-    Parameters:
-    - image: Input grayscale image
-    - low_threshold: Lower threshold for edge linking
-    - high_threshold: Upper threshold for edge detection
-    - sigma: Standard deviation for Gaussian smoothing
-    
-    Returns:
-    - edges: Binary edge image
-    """
-    # Your implementation steps:
-    # 1. Gaussian smoothing
-    # 2. Gradient calculation
-    # 3. Non-maximum suppression (simplified)
-    # 4. Double thresholding
-    # 5. Edge tracking (simplified)
-    pass
-```
-
-**Requirements:**
-- Implement all major steps of Canny algorithm
-- Test different threshold values
-- Compare with OpenCV's `cv2.Canny()`
-- Analyze parameter sensitivity
-
-### **Part 3: Morphological Operations (25 points)**
-
-#### Task 3.1: Basic Morphological Operations (15 points)
-Implement fundamental morphological operations:
-
-1. **Erosion and Dilation**
+2. **Prewitt Edge Detector (10 points)**
    ```python
-   def morphological_operation(image, kernel, operation='erosion'):
-       """
-       Implement basic morphological operations
+   def prewitt_edge_detection(image):
+       """Implement Prewitt edge detection"""
+       # Prewitt kernels  
+       prewitt_x = np.array([[-1, 0, 1], [-1, 0, 1], [-1, 0, 1]])
+       prewitt_y = np.array([[-1, -1, -1], [0, 0, 0], [1, 1, 1]])
        
-       Parameters:
-       - image: Binary input image
-       - kernel: Structuring element
-       - operation: 'erosion' or 'dilation'
-       
-       Returns:
-       - result: Processed binary image
-       """
        # Your implementation here
        pass
    ```
+   - Compare Prewitt results with Sobel on the same images
+   - Analyze differences in edge detection quality
 
-2. **Opening and Closing**
-   - Implement as combinations of erosion and dilation
-   - Test on noisy binary images
+3. **Roberts Cross-Gradient (10 points)**
+   ```python
+   def roberts_edge_detection(image):
+       """Implement Roberts cross-gradient operator"""
+       # Roberts kernels
+       roberts_x = np.array([[1, 0], [0, -1]])
+       roberts_y = np.array([[0, 1], [-1, 0]])
+       
+       # Your implementation here
+       pass
+   ```
+   - Apply Roberts operator to your images
+   - Compare with Sobel and Prewitt results
 
-3. **Gradient and Top-hat**
-   - Morphological gradient: dilation - erosion
-   - Top-hat: original - opening
+#### Task 2.2: Edge Detection Comparison and Analysis (25 points)
 
-**Requirements:**
-- Create different structuring elements (rectangular, circular, cross)
-- Test on binary images extracted from your test dataset
-- Compare with OpenCV implementations
+1. **Comparative Visualization (15 points)**
+   - Create a comparison grid showing results of all three edge detectors on each of your images
+   - Use consistent visualization (same colormap, scaling)
+   - Include original image for reference
 
-#### Task 3.2: Advanced Morphological Analysis (10 points)
-Apply morphological operations for practical problems:
+2. **Qualitative Analysis (10 points)**
+   Write a brief analysis addressing:
+   - Which edge detector works best for different types of content (faces, text, outdoor scenes)?
+   - How do the different operators handle noise?
+   - What are the trade-offs between sensitivity and noise robustness?
+   - Which method preserves fine details better?
 
-1. **Noise Removal**: Clean up binary document images
-2. **Shape Analysis**: Extract and count objects in binary images
-3. **Text Processing**: Separate touching characters in document images
-
-### **Part 4: Comparative Analysis and Applications (20 points)**
-
-#### Task 4.1: Filter Comparison Study (10 points)
-Create a comprehensive comparison of filtering techniques:
-
-1. **Noise Reduction Effectiveness**
-   - Add different types of noise (Gaussian, salt-and-pepper, speckle)
-   - Test various filters on each noise type
-   - Measure performance using PSNR and SSIM metrics
-
-2. **Edge Preservation Analysis**
-   - Compare how different filters affect edge preservation
-   - Use edge-aware metrics for evaluation
-
-3. **Computational Performance**
-   - Time different implementations
-   - Analyze complexity trade-offs
-
-#### Task 4.2: Real-World Application (10 points)
-Choose one of the following applications and implement a complete solution:
-
-**Option A: Document Image Enhancement**
-- Preprocess scanned document for OCR
-- Remove noise, enhance contrast, sharpen text
-- Implement complete pipeline
-
-**Option B: Medical Image Enhancement**
-- Enhance medical image for better visualization
-- Apply appropriate filtering for noise reduction
-- Highlight important features using edge detection
-
-**Option C: Quality Control System**
-- Detect defects in manufactured products
-- Use edge detection and morphological operations
-- Create automated inspection pipeline
+**Deliverables for Part 2:**
+- Working implementations of all three edge detectors
+- Comparative visualization grid for all your images
+- Written analysis of results and method comparison
 
 ---
 
-## **Implementation Guidelines**
+## Implementation Guidelines
 
-### **Code Structure**
+### Code Structure
 Your Google Colab notebook should be organized as follows:
 
 ```
 1. Setup and Imports
-2. Helper Functions
+2. Image Loading and Preprocessing
+   2.1 Load your captured images
+   2.2 Convert to grayscale
+   2.3 Display original images
 3. Part 1: Spatial Filtering
    3.1 Custom Convolution Implementation
-   3.2 Basic Filters Implementation
-   3.3 Results and Analysis
+   3.2 Gaussian Blur Implementation and Testing
+   3.3 Box Filter Implementation and Testing
+   3.4 Unsharp Masking Implementation and Testing
+   3.5 Part 1 Results Summary
 4. Part 2: Edge Detection
-   4.1 Gradient-based Methods
-   4.2 Canny Implementation
-   4.3 Comparative Analysis
-5. Part 3: Morphological Operations
-   5.1 Basic Operations
-   5.2 Advanced Applications
-6. Part 4: Comprehensive Analysis
-   6.1 Filter Comparison
-   6.2 Real-world Application
-7. Conclusions and Insights
+   4.1 Sobel Edge Detection Implementation
+   4.2 Prewitt Edge Detection Implementation  
+   4.3 Roberts Edge Detection Implementation
+   4.4 Comparative Analysis and Visualization
+5. Final Conclusions
 ```
 
-### **Documentation Requirements**
-- **Clear comments** explaining algorithm steps
-- **Docstrings** for all functions
-- **Markdown cells** explaining theory and methodology
-- **Visual results** with proper captions
-- **Performance analysis** with quantitative metrics
+### Documentation Requirements
+- **Clear comments** explaining each step of your algorithms
+- **Docstrings** for all functions with parameter descriptions
+- **Markdown cells** explaining the theory behind each method
+- **Proper captions** for all images and plots
+- **Code organization** with logical sections
 
-### **Testing Protocol**
-1. **Correctness Testing**: Compare your implementations with OpenCV functions
-2. **Parameter Sensitivity**: Test different parameter values
-3. **Boundary Cases**: Test with edge cases (small images, extreme parameters)
-4. **Performance Testing**: Measure execution time for different image sizes
+### Image Handling Guidelines
+```python
+# Example image loading and preprocessing
+import cv2
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Load and preprocess your images
+def load_and_preprocess_image(image_path, max_size=512):
+    """Load image and resize if necessary"""
+    image = cv2.imread(image_path)
+    image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+    
+    # Resize if too large (for faster processing)
+    height, width = image.shape[:2]
+    if max(height, width) > max_size:
+        scale = max_size / max(height, width)
+        new_width = int(width * scale)
+        new_height = int(height * scale)
+        image = cv2.resize(image, (new_width, new_height))
+    
+    return image
+
+# Convert to grayscale for processing
+def rgb_to_grayscale(image):
+    """Convert RGB image to grayscale"""
+    return np.dot(image[...,:3], [0.2989, 0.5870, 0.1140])
+```
 
 ---
 
-## **Evaluation Criteria**
+## Evaluation Criteria
 
-### **Technical Implementation (60 points)**
-- **Code Quality** (20 points): Clean, efficient, well-documented code
-- **Algorithm Correctness** (25 points): Proper implementation of algorithms
-- **Testing and Validation** (15 points): Comprehensive testing with OpenCV comparison
+### Technical Implementation (70 points)
+- **Custom Convolution** (15 points): Correct implementation without OpenCV
+- **Spatial Filtering** (25 points): Proper implementation of Gaussian, box, and unsharp mask filters
+- **Edge Detection** (30 points): Correct implementation of Sobel, Prewitt, and Roberts operators
 
-### **Analysis and Insights (25 points)**
-- **Comparative Analysis** (15 points): Thorough comparison of different methods
-- **Parameter Studies** (10 points): Analysis of parameter effects
+### Analysis and Results (20 points)
+- **Visual Results** (10 points): Clear, well-presented filter and edge detection results
+- **Comparative Analysis** (10 points): Thoughtful comparison of different methods
 
-### **Presentation and Documentation (15 points)**
-- **Code Organization** (5 points): Clear notebook structure
-- **Visual Presentation** (5 points): Quality of plots and figures
-- **Written Analysis** (5 points): Clear explanations and insights
+### Code Quality and Documentation (10 points)
+- **Code Organization** (5 points): Clean, readable code structure
+- **Documentation** (5 points): Good comments and explanations
 
-### **Bonus Points (up to 10 points)**
-- **Creative Applications**: Novel use of filtering techniques
-- **Performance Optimization**: Efficient implementations
-- **Advanced Features**: Implementation of additional algorithms
+### Bonus Points (up to 10 points)
+- **Creative Image Choices**: Interesting or challenging images for testing
+- **Additional Analysis**: Extra experiments or insights
+- **Code Efficiency**: Optimized implementations
 
 ---
 
-## **Submission Requirements**
+## Submission Requirements
 
-### **File Submission**
+### What to Submit
 1. **Google Colab Notebook** (.ipynb file)
-   - Include all code, results, and analysis
-   - Ensure all cells are executed and outputs are visible
-   - Share link should be accessible to instructors
+   - Include all code, outputs, and analysis
+   - Ensure all cells are executed and results are visible
+   - Make sure the notebook is shared with instructor access
 
-2. **README File** (.txt or .md)
-   - Brief description of your implementation
-   - Instructions for running the code
-   - List of external resources used
+2. **Your Original Images**
+   - Upload your 3+ original images to your Colab environment
+   - Include them in the notebook execution
 
-### **Submission Checklist**
-- [ ] All required functions are implemented
-- [ ] Code runs without errors in Google Colab
-- [ ] All visualizations are included with proper captions
-- [ ] Comparative analysis is complete
-- [ ] Code is well-documented with comments
-- [ ] Performance metrics are calculated and reported
-- [ ] Real-world application is fully implemented
-- [ ] Notebook is organized and easy to follow
+### Submission Checklist
+- [ ] All required functions are implemented from scratch
+- [ ] Custom convolution function works correctly
+- [ ] All three filters (Gaussian, box, unsharp mask) are implemented and tested
+- [ ] All three edge detectors (Sobel, Prewitt, Roberts) are implemented
+- [ ] Your own captured images are used throughout
+- [ ] Results are clearly visualized with proper labels
+- [ ] Comparative analysis is included
+- [ ] Code is well-commented and organized
+- [ ] Notebook runs without errors
 
-### **Academic Integrity**
-- You may discuss concepts with classmates, but all code must be your own
-- Properly cite any external resources or references used
-- Do not copy code from online sources without attribution
-- Plagiarism will result in zero points for the assignment
+### File Naming
+- Notebook: `LastName_FirstName_CV_ImageFiltering.ipynb`
+- Example: `Smith_John_CV_ImageFiltering.ipynb`
 
 ---
 
-## **Resources and References**
+## Resources and Tips
 
-### **Primary References**
-- Gonzalez & Woods, "Digital Image Processing", Chapters 3, 9, 10
-- OpenCV-Python Tutorials: https://docs.opencv.org/master/d6/d00/tutorial_py_root.html
+### Essential NumPy Operations
+```python
+# Useful NumPy functions for this assignment
+np.zeros_like()     # Create zero array with same shape
+np.pad()            # Add padding to arrays
+np.sqrt()           # Square root for magnitude calculation
+np.arctan2()        # Calculate gradient direction
+np.clip()           # Clip values to valid range [0, 255]
+```
 
-### **Helpful Links**
-- **NumPy Documentation**: https://numpy.org/doc/stable/
-- **Matplotlib Gallery**: https://matplotlib.org/stable/gallery/index.html
-- **SciPy Image Processing**: https://docs.scipy.org/doc/scipy/reference/ndimage.html
+### Visualization Tips
+```python
+# Good visualization practice
+plt.figure(figsize=(15, 5))
+plt.subplot(1, 3, 1)
+plt.imshow(original, cmap='gray')
+plt.title('Original')
+plt.axis('off')
 
-### **Sample Code Templates**
-Templates for common operations will be provided in the course materials folder.
+plt.subplot(1, 3, 2)
+plt.imshow(filtered, cmap='gray')
+plt.title('Filtered')
+plt.axis('off')
+
+plt.subplot(1, 3, 3)
+plt.imshow(edges, cmap='gray')
+plt.title('Edges')
+plt.axis('off')
+
+plt.tight_layout()
+plt.show()
+```
+
+### Common Issues and Solutions
+1. **Image too large**: Resize images to 512x512 max for faster processing
+2. **Wrong data types**: Ensure images are in proper format (0-255 for uint8)
+3. **Kernel size**: Start with small kernels (3x3, 5x5) for testing
+4. **Padding issues**: Be careful with array bounds in convolution
 
 ---
 
-## **Getting Help**
+## Timeline
 
-### **Office Hours**
-- **Instructor**: [Day/Time]
-- **Teaching Assistant**: [Day/Time]
+| Days 1-2 | Set up environment, capture images, implement convolution |
+| Days 3-4 | Implement and test spatial filters |
+| Days 5-6 | Implement edge detection algorithms |
+| Day 7 | Final testing, documentation, and submission |
+
+**Due Date**: [Insert specific date and time]  
+**Late Policy**: -10% per day late (maximum 2 days)
+
+---
+
+## Getting Help
+
+### Common Questions
+- **Q**: Can I use smartphone images?  
+  **A**: Yes, smartphone photos are perfect for this assignment.
+
+- **Q**: What if my convolution results don't exactly match OpenCV?  
+  **A**: Small differences due to different padding methods are acceptable.
+
+- **Q**: Should I implement color image filtering?  
+  **A**: No, work with grayscale images for simplicity.
 
 ### **Discussion Forum**
 Use the course discussion forum for:
@@ -381,6 +414,12 @@ Use the course discussion forum for:
 1. **Memory limitations in Colab**: Use smaller test images for development
 2. **Slow execution**: Optimize loops and use vectorized operations
 3. **Import errors**: Ensure all required libraries are installed
+
+
+---
+
+*This simplified assignment focuses on core image filtering concepts. Take time to understand the mathematical principles behind each algorithm. Good luck!*
+
 
 ---
 
@@ -394,11 +433,6 @@ Use the course discussion forum for:
 
 **Final Due Date**: [Insert specific date and time]  
 **Late Submission Policy**: -10% per day late (up to 3 days)
-
----
-
-*This assignment is designed to build strong foundations in classical computer vision techniques. Take time to understand the algorithms conceptually before implementing them. Good luck!*
-
 
 
 ---
