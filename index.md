@@ -18,6 +18,7 @@ Welcome to the main page of TIF456 - Computer Vision repository page.
 ## Materials
   - Introduction to the [course](course.md){:target="_blank"}
   - Image [acquisition/formation](W02-Image-Formation.md){:target="_blank"}
+  - Image [filtering](W03-Image-Filtering.md){:target="_blank"}
   
 ## Notebooks
   - Fundamentals of image
