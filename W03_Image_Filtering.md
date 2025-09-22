@@ -387,9 +387,6 @@ plt.show()
 | Days 5-6 | Implement edge detection algorithms |
 | Day 7 | Final testing, documentation, and submission |
 
-**Due Date**: [Insert specific date and time]  
-**Late Policy**: -10% per day late (maximum 2 days)
-
 ---
 
 ## Getting Help
@@ -419,21 +416,6 @@ Use the course discussion forum for:
 ---
 
 *This simplified assignment focuses on core image filtering concepts. Take time to understand the mathematical principles behind each algorithm. Good luck!*
-
-
----
-
-## **Timeline and Milestones**
-
-| Week | Milestone | Deliverable |
-|------|-----------|-------------|
-| Week 1 | Environment setup and Part 1 | Basic filtering implementations |
-| Week 1.5 | Parts 2-3 completion | Edge detection and morphology |
-| Week 2 | Analysis and documentation | Complete assignment |
-
-**Final Due Date**: [Insert specific date and time]  
-**Late Submission Policy**: -10% per day late (up to 3 days)
-
 
 ---
 
