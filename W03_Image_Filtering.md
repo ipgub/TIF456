@@ -2,7 +2,7 @@
 layout: default
 ---
 
-# Week 2: Image Filtering
+# Week 3: Image Filtering
 {: .no_toc .text-delta }
 
 **Author:** *Irwan Prasetya Gunawan* \
