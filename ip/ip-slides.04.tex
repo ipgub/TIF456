@@ -1,0 +1,1178 @@
+
+%%%%%%%%%%%%%%%%%%
+%
+%
+%%%%%%%%%%%%%%%%%%
+\begin{slide}{Agenda}
+\tableofcontents
+\end{slide}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Introduction}
+
+\subsection{Dynamic range and visibility}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{slide}{Dynamic range, visibility, and contrast enhancement}
+\vspace{-3ex}
+\slidefig[0.55]{scale.jpg}
+\vspace{-5ex}
+\begin{titlelist}{}{}
+\small
+\item<2-> 
+Contrast enhancing point functions we have discussed
+earlier expand the dynamic range occupied by certain 
+``interesting'' pixel
+values in the input image.
+
+\item<3-> 
+These pixel values in the input image may be
+difficult to distinguish and the goal of contrast enhancement
+is to make them ``more visible'' in the output image.
+
+\item<4-> 
+Don't forget we have a limited dynamic range $(0-255)$ at
+our disposal.
+
+\end{titlelist}
+\end{slide}
+
+
+\subsection{Point functions and Histograms}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{slide}{Point functions and Histograms}
+\begin{titlelist}{}{}
+
+\item<2-> 
+In general a \darkred{point operation/function} $B(i,j)=g(A(i,j))$
+results in a new histogram $h_B(l)$ for the output image
+that is different from $h_A(l)$.
+
+\item<3-> 
+The relationship between $h_B(l)$ and $h_A(l)$ may not be
+straightforward as we have already discussed in previous lecture.
+
+\item<4-> 
+We {\em must} learn how to calculate $h_B(l)$ given $h_A(l)$
+and the point function $g(l)$:
+
+\begin{itemize}
+\item<5-> 
+\red{Exactly:} Usually via writing a matlab script that
+computes $h_B(l)$ from $h_A(l)$ and $g(l)$.
+
+\item<6-> 
+\red{Approximately:} By sketching  $h_B(l)$
+given the sketches for $h_A(l)$ and $g(l)$.
+\end{itemize}
+
+\end{titlelist}
+\end{slide}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{slide}{``Unexpected'' Effect of some Point Functions}
+\vspace*{-3ex}
+\begin{columns}
+\begin{column}{0.6\textwidth}
+\slidefig[0.7]{round.jpg}
+\end{column}
+\begin{column}{0.4\textwidth}
+\begin{itemize}
+\small
+\item<1-> ${\bf B}$ has $\sim 10$ times as few distinct pixel values.
+\item<2-> Note also the vertical axis scaling in $h_B(l)$.
+\end{itemize}
+\end{column}
+\end{columns}
+\end{slide}
+
+\subsection{Stretched/compressed pixel value ranges}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{slide}{Stretched/compressed pixel value ranges}
+\begin{titlelist}{}{}
+
+\item<2-> $B(i,j)=g(A(i,j))$\\
+Suppose $g(l)$ represents an {\em overall} point function which
+includes contrast stretching/compression, emphasis/de-emphasis, rounding,
+normalizing etc.
+
+\item<3-> Given an image matrix ${\bf A}$, $B(i,j)=g(A(i,j))$ is also
+an image matrix.
+
+\item<4-> $g(l)$ may not be ``continuous'' or connected and it also
+may not be composed of connected line segments.
+
+\item<5-> How do we determine which pixel value ranges $g(l)$ 
+stretches/compresses?
+\begin{itemize}
+\item<6-> 
+We can usually assume that in small ranges $g(l)$ may be
+approximated by piecewise linear, connected line segments.
+Calculating the implied $\alpha_i$ and testing $|\alpha_i| \stackrel{>}{<} 1$
+should help us determine stretched/compressed ranges.
+\end{itemize}
+
+\end{titlelist}
+
+\end{slide}
+
+
+\subsection{Segmentation}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{slide}{Segmentation}
+\begin{titlelist}{}{}
+\small
+\item<2-> If one views an image as depicting a scene
+composed of different objects, regions, etc.
+then \red{segmentation} is the 
+decomposition of an image into these objects and regions 
+by associating or ``labelling'' each pixel with the object that it corresponds to.
+
+\item<3-> Most humans can easily segment an image. 
+
+\item<4-> Computer automated segmentation is a difficult problem,
+requiring sophisticated algorithms that work in tandem.
+
+\item<5-> ``High level'' segmentation, such as segmenting humans,
+cars etc., from an image is a very difficult problem.
+It is still considered unsolved and is actively researched.
+
+\item<6-> Based on point processing, histogram based image segmentation is a very simple algorithm
+that is sometimes utilized as an initial guess at the ``true''
+segmentation of an image. 
+
+\end{titlelist}
+
+\end{slide}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Histogram Based Image Segmentation}
+
+\subsection{Methods}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{slide}{Histogram Based Image Segmentation}
+\begin{titlelist}{}{}
+
+\item<2-> For a given image, decompose the range of pixel values $(0,\ldots, 255)$ into
+``discrete'' intervals $R_t=[a_t,b_t],\ t=1,\ldots,T$, where $T$ is the total
+number of segments. 
+
+\item<3-> 
+Each $R_t$ is typically obtained as a range of pixel
+values that correspond to a \blue{hill} of $h_A(l)$.
+
+\item<4-> 
+``Label'' the pixels with pixel values within each $R_t$
+via a point function. 
+
+\item<5-> 
+\red{Main Assumption:} Each object is assumed
+to be composed of pixels with {\em similar} pixel values.
+
+\end{titlelist}
+\end{slide}
+
+
+\subsection{Example}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{slide}{Example}
+\vspace{-6ex}
+\slidefig[0.85]{claire.jpg}
+\vspace{-6ex}
+\begin{titlelist}{}{}
+\small
+\item<2-> 
+$R_1=[0,14],R_2=[15, 15],R_3=[16, 99],
+R_4=[100,149],R_5=[150,220],R_6=[221,255]$.
+
+\item<3-> 
+Labeling in matlab: $>> B1=255*((A>=0)\&(A<=14));$, etc.
+
+\item<4-> 
+This is what we did in the histogram slicing lecture last week
+
+\end{titlelist}
+\end{slide}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{slide}{Example}
+\vspace{-3ex}
+\slidefig[0.775]{hist1.jpg}
+\end{slide}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{slide}{Example}
+\vspace{-3ex}
+\slidefig[0.775]{hist2.jpg}
+\end{slide}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{slide}{Example}
+\vspace{-3ex}
+\slidefig[0.8]{hist3.jpg}
+\begin{titlelist}{}{}
+\small
+\item<2-> Compute the sample mean of each segment \\
+($>> m1=sum(sum(B1.*A))/sum(sum(B1))$, etc.).
+
+\item<3-> $C=m1\times B1+m2\times B2+m3\times B3+m4\times B4+
+m5\times B5+m6\times B6$.\\
+$B(i,j)=g_s^C(C(i,j))$.
+
+
+\end{titlelist}
+\end{slide}
+
+
+\subsection{Limitations}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{slide}{Limitations}
+\begin{titlelist}{}{}
+
+\item<2-> Histogram based segmentation
+operates on each image pixel independently.
+As mentioned earlier, the main
+assumption is that objects must be composed
+of pixels with similar pixel values.
+
+\item<3-> This independent processing ignores
+a second important property: Pixels
+within an object should be {\em spatially} connected.  
+For example, B3, B4, B5 group spatially disconnected
+objects/regions into the same segment.
+
+\item<4-> In practice, one would use histogram based segmentation
+in tandem with other algorithms
+that make sure that computed objects/regions
+are spatially connected.
+
+\end{titlelist}
+
+\end{slide}
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Histogram Equalization}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{slide}{Histogram Equalization}
+\begin{titlelist}{}{}
+\small
+\item<2-> For a given image ${\bf A}$, we will now
+design a special point function \darkred{$g_A^e(l)$} which
+is called \darkred{the histogram equalizing point function
+for ${\bf A}$}.
+
+\item<3-> If $B(i,j)=g_A^e(A(i,j))$, then our aim is to make
+$h_B(l)$ \blue{as uniform/flat as possible {\em irrespective}
+of $h_A(l)$!}
+
+\item<4-> Histogram equalization will help us:
+\begin{itemize}\scriptsize
+\item<5-> Stretch/Compress an image such that:
+	\begin{itemize}\scriptsize
+	\item Pixel values that occur frequently in ${\bf A}$ occupy
+	a bigger dynamic range in ${\bf B}$, i.e., get stretched and become more
+	visible.
+	\item Pixel values that occur infrequently in ${\bf A}$ occupy
+	a smaller dynamic range in ${\bf B}$, i.e., get compressed and become less
+	visible.
+	\end{itemize}
+\item<6-> Compare images by ``mapping'' their histograms into a standard
+histogram and sometimes ``undo'' the effects of some unknown processing.
+\end{itemize}
+
+\item<7-> The techniques we are going to use to get $g_A^e(l)$
+are also applicable in histogram modification/specification.
+
+\end{titlelist}
+\end{slide}
+
+
+\subsection{Random Variable}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{slide}{Random Variables (RV)}
+\begin{titlelist}{}{}
+\small
+\item<2-> A random variable, $\chi$, is a real-valued function defined on the events of the sample space, $S$.  
+
+\item<3-> In other words, for each event in $S$, there is a real number that is the corresponding value of the random variable.  
+
+\item<4-> Viewed yet another way, a \blue{random variable maps each event in $S$ onto the real line}. 
+
+\item<5-> Example:
+\begin{itemize}
+
+\item<6-> 
+consider the experiment of throwing a single die and observing the value of the up-face.  
+
+\item<7-> 
+We can define a random variable as the numerical outcome of the experiment (i.e., 1 through 6), but there are many other possibilities.  
+
+\item<8-> 
+For example, a binary random variable could be defined simply by letting $\chi = 0$ represent the event that the outcome of a throw is an even number and $\chi=1$ otherwise.
+%represent the event that the outcome of throw is an even number and $\chi = 1$ otherwise.
+
+\end{itemize}
+%\item<9-> 
+%\item<10-> 
+
+\end{titlelist}
+
+\end{slide}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{slide}{Random Variables (RV)}
+\begin{titlelist}{}{}
+\small
+\item<2-> In the discrete case, the probabilities of events are numbers between 0 and 1.  
+
+\item<3-> Later we shall see that the gray levels in an image may be viewed as random variables in the interval $[0,1]$
+
+\item<4-> Probability Density Function (PDF) is one of the fundamental descriptors of a random variable
+
+
+\item<5-> 
+However when dealing with continuous quantities (which are not denumerable) we can no longer talk about the "probability of an event" because that probability is zero. 
+
+\item<6-> 
+Thus in continuous case, instead of talking about the probability of a specific value, we talk about the probability that the value of the random variable lies in a specified range.  
+\begin{itemize}
+\scriptsize
+\item<7-> 
+In particular, we are interested in the probability that the random variable is less than or equal to (or, similarly, greater than or equal to) a specified constant $a$.  
+
+\item<8-> 
+Usually this is written as $ F_{\chi}(a) = P \left( \chi \leq a\right) $
+\end{itemize}
+%represent the event that the outcome of throw is an even number and $\chi = 1$ otherwise.
+
+%\item<9-> 
+%\item<10-> 
+
+\end{titlelist}
+
+\end{slide}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{slide}{Transformation of Random Variable}
+\begin{titlelist}{}{}
+
+\item<2-> 
+Suppose that a random variable $\chi$ is transformed by a monotonic transformation function $T(\chi)$ to produce a new random variable $Y$, 
+
+\item<3-> 
+Then the probability density function of $Y$ can be obtained from knowledge of $T(\chi)$ and the probability density function of $\chi$, as follows:
+\vspace{-2ex}
+\[ f_{Y}(y) = f_{\chi}(x) \left| \dfrac{dx}{dy} \right| \]
+
+\item<4-> Applied to image:
+
+
+\begin{center}
+\onslide<5->
+\mbox{The PDF of the transformed variable (output image)}\\
+\onslide<6->
+\mbox{is determined by}\\
+\onslide<7->
+\mbox{The PDF of the input image; and}\\
+\onslide<8->
+\mbox{the chosen transformation function}
+\end{center}
+
+\end{titlelist}
+
+\end{slide}
+
+\subsection{Continuous Amplitude RV}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{slide}{Continuous Amplitude Random Variables}
+\scriptsize
+\begin{itemize}
+\item Let $\chi$ be a continuous amplitude random variable $\chi \in (-\infty,+\infty)$.
+
+\begin{tabular}{ll}\scriptsize
+$f_{\chi}(x)$: & the \darkred{probability density function} of $\chi$,\\
+$F_{\chi}(x)$: & the \darkred{probability distribution function}
+of $\chi$.
+\end{tabular}
+
+\begin{eqnarray}
+f_{\chi}(x)dx&=&\mbox{Probability}(x\leq \chi < x+dx)\\
+F_{\chi}(x)&=&\mbox{Probability}(\chi \leq x)
+\label{eq:Fdef}
+\end{eqnarray}
+\item Properties:
+\begin{eqnarray}
+F_{\chi}(x)&=&\int_{-\infty}^{x} f_{\chi}(t)dt  \Rightarrow  {dF_{\chi}(x)\over
+dx} = f_{\chi}(x)
+\label{eq:deriv}
+\end{eqnarray}
+\begin{eqnarray}
+f_{\chi}(x)&\geq&0  \Rightarrow  F_{\chi}(x)\geq 0,\ F_{\chi}(x+dx)-F_{\chi}(x)\geq 0
+\label{eq:incr}
+\end{eqnarray}
+$F_{\chi}(x)$ is a non-decreasing function.
+\begin{eqnarray}
+\int_{-\infty}^{+\infty} f_{\chi}(t)dt &=&1 \Rightarrow
+f_{\chi}(x)|_{x=+/-\infty}=0 \\
+F_{\chi}(x)|_{x=+\infty}&=&1 \\
+F_{\chi}(x)|_{x=-\infty}&=&0
+\end{eqnarray}
+
+\end{itemize}
+\end{slide}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{slide}{Examples}
+\begin{columns}
+\begin{column}{0.7\textwidth}
+\slidefig[0.6]{prob.jpg}
+\end{column}
+\begin{column}{0.3\textwidth}\scriptsize
+Gaussian: \\
+$f_{\chi}(x)={1\over \sqrt{2\pi \sigma^2}}e^{-(x-\mu)^2\over 2\sigma^2}$\\
+\vspace{15ex}
+\hypertarget{unif}{Uniform} $(a<b)$:
+$$f_{\chi}(x)=\left\{\begin{array}{ll}
+{1\over b-a} & a<x<b \\
+0 & \mbox{otherwise}
+\end{array}\right.$$
+\end{column}
+\end{columns}
+\end{slide}
+
+
+%%%%%%%%%%%%%%%%%%
+%
+%
+%%%%%%%%%%%%%%%%%%
+\begin{slide}{Calculating the Mean and Variance}
+\begin{itemize}
+\item Mean $(\darkred{\mu})$:
+\begin{eqnarray}
+\darkred{\mu}=\int_{-\infty}^{+\infty}x f_{\chi}(x)dx
+\end{eqnarray}
+\blue{Analogy:} Average price of apples \\
+\begin{itemize}
+\item ``I  bought $f_{\chi}(x)dx$ many apples at a price of $x$, ...''
+\item ``Total price I paid: $P=\int_{-\infty}^{+\infty}x f_{\chi}(x)dx$.
+\item ``Total number of apples I purchased: 
+$N=\int_{-\infty}^{+\infty}f_{\chi}(x)dx=1$.
+\item ``My average price for the overall purchase: $\mu=P/N$.
+\end{itemize}
+\item Variance $(\darkred{\sigma^2})$:
+\begin{eqnarray}
+\darkred{\sigma^2}=\int_{-\infty}^{+\infty}(x-\mu)^2 f_{\chi}(x)dx
+\end{eqnarray}
+\end{itemize}
+
+\end{slide}
+
+
+%%%%%%%%%%%%%%%%%%
+%
+%
+%%%%%%%%%%%%%%%%%%
+\begin{slide}{Main Derivation}
+\begin{titlelist}{}{}
+
+\item<2-> 
+We will now obtain a new random variable $Y$ $(f_Y(y),F_Y(y))$ \red{as
+a {\em function} of the random variable $\chi$}, i.e., $Y=g(\chi)$.
+
+\item<3-> 
+We wish to make $Y$ a uniform random variable
+(a random variable having the uniform probability density
+function) \blue{irrespective} of the density of $\chi$.
+
+\item<4-> 
+Our main assumption will be:
+
+\begin{itemize}
+\item<5-> 
+Assume $F_{\chi}(x)$ is a continuous and strictly increasing function
+(compared to the general case of non-decreasing as in Equation~\eqref{eq:incr})
+\item<6-> Note that such an $F_{\chi}(x)$ is one-to-one which
+will allow us to use its inverse $F_{\chi}^{-1}(x)$.
+\end{itemize}
+
+\end{titlelist}
+
+\end{slide}
+
+
+
+%%%%%%%%%%%%%%%%%%
+%
+%
+%%%%%%%%%%%%%%%%%%
+\begin{slide}{Main Derivation (cont'd)}
+
+\begin{titlelist}{}{}
+\scriptsize
+\item<2-> 
+Let $Y=F_{\chi}(\chi)$, i.e., $g(\chi)=F_{\chi}(\chi)$.
+Note that $Y \in [0,1]$ and $f_Y(y)=0$ if $y\not\in [0,1]$.
+
+\item<3-> 
+Let us derive $F_Y(y)$ for $y\in [0,1]$:
+\begin{eqnarray*}
+F_{Y}(y)&=&\mbox{Probability}(Y \leq y)\\
+&=&\mbox{Probability}(F_{\chi}(\chi) \leq y)\\
+&=&\mbox{Probability}(\chi \leq F_{\chi}^{-1}(y))\\
+&=&F_{\chi}(F_{\chi}^{-1}(y)) \\
+&=&y 
+\end{eqnarray*}
+where the next to last step follows from Equation \eqref{eq:Fdef}.
+
+\item<4-> 
+Using Equation \eqref{eq:deriv}  and $f_Y(y)=0$ if $y\not\in [0,1]$,
+we have
+\begin{eqnarray}
+f_Y(y)=\left\{\begin{array}{ll}
+0 & y<0,\ y>1 \\
+1 & y\in [0,1]
+\end{array}\right.
+\end{eqnarray}
+i.e., $Y$ is a uniform random variable with \hyperlink{unif}{$a=0$ and $b=1$} .
+
+\end{titlelist}
+
+
+\end{slide}
+
+\subsection{Discrete Amplitude RV}
+
+
+%%%%%%%%%%%%%%%%%%
+%
+%
+%%%%%%%%%%%%%%%%%%
+\begin{slide}{Discrete Amplitude Random Variables}
+\begin{itemize}
+\scriptsize
+\item Let $\Theta$ be a discrete amplitude random variable.\\
+$\Theta=x_i$ for some $i$, $\ldots,-1,0,1,\ldots$.\\
+$x_i$ are a sequence of possible values for $\Theta$.
+\vspace{.2in}
+ 
+\begin{tabular}{ll}
+$p_{\Theta}(x_i)$: & the \darkred{probability mass function} of $\Theta$,\\
+$F_{\Theta}(x_i)$: & the \darkred{probability distribution function}
+of $\Theta$.
+\end{tabular}
+\begin{eqnarray}
+p_{\Theta}(x_i)&=&\mbox{Probability}(\Theta=x_i)\\
+F_{\Theta}(x_i)&=&\mbox{Probability}(\Theta \leq x_i)
+\end{eqnarray}
+\item Properties:
+\begin{eqnarray}
+F_{\Theta}(x_i)&=&\sum_{j=-\infty}^{j=i} p_{\Theta}(x_j) \\
+p_{\Theta}(x_i)&=&F_{\Theta}(x_i)-F_{\Theta}(x_{i-1}) \geq 0\\
+\sum_{j=-\infty}^{j=+\infty} p_{\Theta}(x_j)&=&1
+\end{eqnarray}
+\end{itemize}
+
+\end{slide}
+
+
+
+%%%%%%%%%%%%%%%%%%
+%
+%
+%%%%%%%%%%%%%%%%%%
+\begin{slide}{Example}
+\slidefig[0.8]{upmf.jpg}
+
+The probability mass and distribution functions for a uniform,
+discrete amplitude random variable.
+\end{slide}
+
+
+
+%%%%%%%%%%%%%%%%%%
+%
+%
+%%%%%%%%%%%%%%%%%%
+\begin{slide}{Derivation for \hypertarget{darv}{Discrete Amplitude R.V.s}}
+\slidefig[0.75]{diseq.jpg}
+
+\begin{itemize}\small
+\item Let $\Omega=F_{\Theta}(\Theta)$.
+$\Omega=y_i=F_{\Theta}(x_i)$ for some $i$, $\ldots,-1,0,1,\ldots$.
+\item Our earlier derivation for continuous amplitude random
+variables does not ``work'' for discrete amplitude random variables.
+\item In general $\Omega$ is not a uniform random variable. 
+\end{itemize}
+\end{slide}
+
+
+%%%%%%%%%%%%%%%%%%
+%
+%
+%%%%%%%%%%%%%%%%%%
+\begin{slide}{Histogram as a Probability Mass Function}
+\begin{itemize}
+\small
+\item For a given image ${\bf A}$,
+consider the image pixels as the realizations of
+a discrete amplitude random variable ``$A$''.
+\begin{itemize}\scriptsize
+\item For example suppose we toss a coin {(Heads=$255$ and Tails=$0$)}
+$N\times M$ times and record the results as an $N$ by $M$ image matrix.
+\end{itemize}
+\item Define the sample probability mass function $p_{A}(l)$
+as the probability of a randomly chosen pixel having the value $l$.
+\begin{eqnarray}
+p_{A}(l)={h_A(l) \over NM}
+\end{eqnarray}
+\item Note that the sample mean and variance we talked about
+in previous lecture can be calculated as:
+\begin{eqnarray*}
+m_A&=&\sum_{l=0}^{255} l p_A(l) \\
+\sigma^2_A&=&\sum_{l=0}^{255} (l-m_A)^2 p_A(l)
+\end{eqnarray*} 
+\end{itemize}
+\end{slide}
+
+\subsection{Histogram equalizing point function}
+%%%%%%%%%%%%%%%%%%
+%
+%
+%%%%%%%%%%%%%%%%%%
+\begin{slide}{Histogram equalizing point function}
+\begin{titlelist}{}{}
+\small
+\item<2-> Let $g_1(l)=\sum_{k=0}^{l} p_A(k)$.\\
+$
+g_1(l)-g_1(l-1)=p_A(l)= {h_A(l)\over NM}
+$.\\
+
+
+Note that $g_1(l)\in [0,1]$.
+
+\item<3-> 
+\darkred{$g_A^e(l)=\mbox{round}(255 g_1(l))$}
+is the histogram equalizing point function for the image ${\bf A}$.
+
+\item<4-> 
+Image ${\bf A}\ \Rightarrow$ ``equalize image'' $\Rightarrow
+B(i,j)=g_A^e(A(i,j))$.
+
+%\mynote{4}{24}{
+%Note that A is an image matrix and
+%so is B, thanks to the way we have constructed the histogram equalizing
+%point function
+%}
+
+\item<5-> 
+\hyperlink{darv}{As we have seen}, in general $p_B(l)$
+will not be a uniform probability mass function but hopefully
+it will be close. 
+
+\item<6-> 
+In matlab $>> \mbox{help filter}$ to construct
+$g_A^e(A(i,j))$ fast.
+
+\item<7-> 
+Assuming $gAe$ is an array that contains the computed
+$g_A^e(l)$, we can use $>> B=gAe(A+1);$ to obtain the equalized image.
+
+\end{titlelist}
+
+\end{slide}
+
+
+
+%%%%%%%%%%%%%%%%%%
+%
+%
+%%%%%%%%%%%%%%%%%%
+\begin{slide}{Stretching and Compression}
+\vspace*{-3ex}
+\slidefig[0.7]{range.jpg}
+\begin{itemize}
+\small
+\item $g_A^e(l)$ stretches the range of pixel values that occur
+frequently in ${\bf A}$.
+\item $g_A^e(l)$ compresses the range of pixel values that occur
+infrequently in ${\bf A}$.
+\end{itemize}
+
+\end{slide}
+
+
+
+%%%%%%%%%%%%%%%%%%
+%
+%
+%%%%%%%%%%%%%%%%%%
+\begin{slide}{Examples}
+\vspace*{-3ex}
+\slidefig[0.75]{lenae1.jpg}
+\vspace*{-4ex}
+\slidefig[0.6]{lenae2.jpg}
+\end{slide}
+
+
+%%%%%%%%%%%%%%%%%%
+%
+%
+%%%%%%%%%%%%%%%%%%
+\begin{slide}{\hypertarget{compare}{Comparison}}
+\begin{columns}
+\begin{column}{0.7\textwidth}
+\vspace*{-3ex}
+\slidefig[0.7]{eq1.jpg}
+\vspace*{-6ex}
+\end{column}
+\begin{column}{0.3\textwidth}
+\scriptsize
+ Instead of comparing ${\bf A}$ and ${\bf C}$, compare their
+equalized versions.
+\end{column}
+\end{columns}
+\end{slide}
+
+%%%%%%%%%%%%%%%%%%
+%
+%
+%%%%%%%%%%%%%%%%%%
+\begin{slide}{Comparison}
+\begin{columns}
+\begin{column}{0.7\textwidth}
+\vspace*{-3ex}
+\slidefig[0.7]{eq2.jpg}
+\vspace*{-6ex}
+\end{column}
+\begin{column}{0.3\textwidth}
+\scriptsize
+ Instead of comparing ${\bf A}$ and ${\bf C}$, compare their
+equalized versions.
+\end{column}
+\end{columns}
+\end{slide}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{slide}{Another example}
+\vspace{-4ex}
+\slidefig[0.5]{histeq1.jpg}
+\end{slide}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{slide}{Another example}
+\vspace{-4ex}
+\slidefig[0.5]{histeq2.jpg}
+\end{slide}
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%
+%
+%
+%%%%%%%%%%%%%%%%%%
+\begin{slide}{Practical considerations}
+\begin{bulletlist} %{}{}
+\small
+\item<2-> \textbf{Histogram calculation}
+\begin{columns}
+\begin{column}{0.5\textwidth}\scriptsize
+Manual computation:
+\begin{code}[8]{}
+\begin{tabbing}
+>>  \=  h = zeros(256,1); \\
+>>	\>	for  \= l = 0:255   \\
+	\>  \>   h(l+1) = sum(sum(A==l)); \\
+	\>  end \\
+>> \> bar(0:255,h); \% display \\
+\end{tabbing}  
+\end{code}
+\end{column}
+\begin{column}{0.5\textwidth}\scriptsize
+Matlab built in function:
+\begin{code}[8]{}
+[h,bin] = imhist(A) \% calculate \\
+imhist(A) \% display \\
+\end{code}
+\vfill
+\end{column}
+\end{columns}
+
+\item<3-> \textbf{Histogram stretching}
+\begin{columns}
+\begin{column}{0.5\textwidth}
+\begin{code}[8]{}
+I = imread('image.jpg'); \\
+a = min(I(:)); \\
+b = max(I(:)); \\
+J = 255 * (I-a)/(b-a); \\
+J = unit8(J)
+\end{code}
+\end{column}
+\begin{column}{0.5\textwidth}
+\[
+J = \dfrac{I - I_{\min}}{I_{\max} - I_{\min}}
+\]
+\end{column}
+\end{columns}
+
+
+\end{bulletlist}
+
+\end{slide}
+
+
+%%%%%%%%%%%%%%%%%%
+%
+%
+%%%%%%%%%%%%%%%%%%
+\begin{slide}{Practical considerations}
+\begin{bulletlist} %{}{}
+\small
+\item<2-> \textbf{Histogram adjustment}
+\begin{columns}
+\begin{column}{0.5\textwidth}
+\begin{code}[7]{}
+I = imread('lizard.jpg'); \\
+A = 75;  \% lower threshold \\
+B = 155; \% upper threshold \\
+
+\% Initialize \\
+\% Areas for intensity >= B \\
+K1 = zeros(size(I)); \\
+\% Areas for A <= intensity < B \\
+K2 = K1; \\
+\% Areas for intensity < A \\
+K3 = K1; \\
+
+\% Calculation \\
+\% labeling K1 and set its value to 255 \\
+K1 = 255 * (I>=B); \\
+\% selecting area K2 and normalize \\
+K2 = 255 * ((I>=A) \& (I<B)) .* (double(I)-A)/(B-A); \\
+\% labeling K3 \\
+K3 = 255 * (I < A); \\
+
+K = K1 + K2 + 0 * K3; \\
+K = uint8(K); \\
+
+\end{code}
+\end{column}
+\begin{column}{0.5\textwidth}
+Non-linear operation
+\[ 
+K = \begin{cases}
+255 & \mbox{if}\ I \geq B \\
+255 \frac{I-A}{B-A} & \mbox{if}\ A \leq I < B \\
+0 & \mbox{if}\ I < A
+\end{cases}
+ \]
+ 
+Matlab built-in function
+\begin{code}[8]{}
+K = imadjust(I,[75 150]/255,[]);
+\end{code}
+\end{column}
+\end{columns}
+
+
+%\item<5-> 
+%
+%\item<6-> 
+%
+%\item<7-> 
+%
+%\item<8-> 
+%
+%\item<9-> 
+%
+%\item<10-> 
+
+\end{bulletlist}
+
+\end{slide}
+
+
+%%%%%%%%%%%%%%%%%%
+%
+%
+%%%%%%%%%%%%%%%%%%
+\begin{slide}{Practical}
+\vspace{-3ex}
+\begin{columns}
+\begin{column}{0.45\textwidth}
+\begin{center}
+Original
+\includegraphics[width=0.8\linewidth]{../mat/lizard}\\
+\includegraphics[width=0.6\linewidth]{../mat/Hist_lizard}
+\end{center}
+\end{column}
+\begin{column}{0.45\textwidth}
+\begin{center}
+Histogram Adjusted
+\includegraphics[width=0.8\linewidth]{../mat/liz_histadjust}\\
+\includegraphics[width=0.6\linewidth]{../mat/Hist_liz_histadjust}
+\end{center}
+\end{column}
+\end{columns}
+\end{slide}
+
+
+%%%%%%%%%%%%%%%%%%
+%
+%
+%%%%%%%%%%%%%%%%%%
+\begin{slide}{LUT: Look Up Table}
+\begin{bulletlist} %{}{}
+\small
+\item<2-> \textbf{Look Up Table}
+\begin{columns}
+\begin{column}{0.5\textwidth}
+\begin{code}[7]{}
+J = rgb2gray(imread('pepper.jpg')); \\
+Jmin = min(J(:));\\
+Jmax = max(J(:));\\
+
+\% create Look Up Table \\
+L = zeros(1,256);\\
+L(1:Jmin) = 0;\\
+L(Jmin+1:Jmax) = linspace(0,255,Jmax-Jmin);\\
+L(Jmax+1:255)=255;\\
+
+Y = uint8(L(J+1));\\
+imwrite(Y,'pepperlut.jpg','jpeg');\\
+
+\end{code}
+\end{column}
+\begin{column}{0.5\textwidth}
+\begin{center}
+\includegraphics[width=0.9\linewidth]{../mat/LUT}
+\end{center}
+
+\end{column}
+\end{columns}
+
+
+%\item<5-> 
+%
+%\item<6-> 
+%
+%\item<7-> 
+%
+%\item<8-> 
+%
+%\item<9-> 
+%
+%\item<10-> 
+
+\end{bulletlist}
+
+\end{slide}
+
+
+%%%%%%%%%%%%%%%%%%
+%
+%
+%%%%%%%%%%%%%%%%%%
+\begin{slide}{Practical}
+\vspace{-3ex}
+\begin{columns}
+\begin{column}{0.45\textwidth}
+\begin{center}
+Original\\
+\includegraphics[width=0.6\linewidth]{../mat/pepper}\\
+\includegraphics[width=0.6\linewidth]{../mat/LUT_pepper}
+\end{center}
+\end{column}
+\begin{column}{0.45\textwidth}
+\begin{center}
+Histogram Adjusted\\
+\includegraphics[width=0.6\linewidth]{../mat/pepperlut}\\
+\includegraphics[width=0.6\linewidth]{../mat/LUT_pepperlut}
+\end{center}
+\end{column}
+\end{columns}
+\end{slide}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{slide}{Histogram Matching -- Specification}
+\begin{titlelist}{}{}
+
+\item<2-> 
+Given {\em images} ${\bf A}$ and ${\bf B}$,
+using point processing
+we would like to generate an image 
+${\bf C}$ \blue{from ${\bf A}$}
+such that $h_C(l)\sim h_B(l),\ (l=0,\ldots, 255)$.
+
+\item<3-> 
+More generally, given an image ${\bf A}$
+and a histogram $h_B(l)$ {(or sample probability mass function
+$p_B(l)$)}, we would like to generate an image 
+${\bf C}$ such that $h_C(l)\sim h_B(l),\ (l=0,\ldots, 255)$.
+
+\item<4-> 
+Histogram matching/specification enables us
+to ``match'' the grayscale distribution in one
+image to  the grayscale distribution in another image.
+
+\end{titlelist}
+\end{slide}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{slide}{Derivation for Continuous Amplitude R.V.s}
+\begin{titlelist}{}{}
+\scriptsize
+\item<2-> 
+We have already seen that for a continuous amplitude random variable
+$\chi$ with strictly increasing and continuous $F_{\chi}(x)$,
+the random variable $Y=F_{\chi}(\chi)$ has the uniform
+probability density/distribution function.
+
+\item<3-> 
+\green{{\em Equivalently}}, for a continuous amplitude random variable
+$Y\in [0,1]$ which has the uniform probability density function,
+$\chi=F_{\chi}^{-1}(Y)$ has the probability density [distribution] function
+$f_{\chi}(x)$ $[F_{\chi}(x)]$.
+\vspace{-3ex}
+\begin{eqnarray*}
+\chi \ [F_{\chi}(x)] &\Rightarrow &Y=F_{\chi}(\chi) \ [\mbox{ uniform}]\\
+Y \ [\mbox{uniform}] &\Rightarrow &\chi=F_{\chi}^{-1}(Y) \ [F_{\chi}(x)]
+\end{eqnarray*}
+
+\item<4-> 
+\red{Now,} assume we have a continuous amplitude random variable
+$Z$ with strictly increasing and continuous $F_{Z}(z).$
+Then:
+\vspace{-2ex}
+\begin{eqnarray}
+Y \ (\mbox{uniform}) &\Rightarrow &W=F_{Z}^{-1}(Y) \ [F_{Z}(w)]
+\end{eqnarray}
+but we can generate the required uniform random variable $Y$
+from $\chi$ via $Y=F_{\chi}(\chi)$ which means $W$ can be generated 
+\blue{from $\chi$} via:
+\vspace{-2ex}
+\begin{eqnarray}
+W=F_{Z}^{-1}(Y)=F_{Z}^{-1}(F_{\chi}(\chi))
+\end{eqnarray}
+
+\end{titlelist}
+\end{slide}
+
+
+
+
+%%%%%%%%%%%%%%%%%%
+%
+%
+%%%%%%%%%%%%%%%%%%
+\begin{frame}[allowframebreaks]{Assignment}
+\begin{enumerate}
+\item Implement normalisation to your image. 
+
+\item Implement histogram based segmentation on your image.
+Identify the peaks of your histogram with the ``objects'' that
+they correspond to.
+Show your image, its histogram, the ranges, etc.
+Show the identified objects.
+Finally construct the histogram segmented image.
+
+%\item Derive the mean and variance for continuous amplitude Gaussian and uniform densities.
+
+\item Equalize your image.
+Show before and after images and histograms.
+Is the histogram of the equalized image uniform?
+Which regions got stretched/compressed?
+(Be as accurate as possible)
+
+%\item Implement the \hyperlink{compare}{Comparison} experiment example on your image. 
+\end{enumerate}
+\end{frame}
