@@ -1,0 +1,475 @@
+%\PassOptionsToPackage{pdflatex}{hyperref}
+\PassOptionsToPackage{
+%%				pdflatex,     
+%%				 pdfpagelayout = useoutlines,
+%%                 bookmarks,
+%%                 bookmarksopen = true,
+%%                 bookmarksnumbered = true,
+%%                 breaklinks = true,
+%%                 linktocpage,
+%%                 pagebackref,
+%                 colorlinks = true,
+%                 linkcolor = red,
+%%                 urlcolor  = blue,
+%%                 citecolor = red,
+%%                 anchorcolor = green,
+%%                 hyperindex = true,
+%%                 hyperfigures
+}{hyperref}	% hypertext package, must come last of loaded packages;
+
+\newif\ifMakeHandout % MakeHandout by default is set to false
+
+%!TEX HANDOUT OPTION
+\MakeHandouttrue	% Comment this line to make slide with progression; uncomment for making handout
+
+\ifMakeHandout
+	\documentclass[aspectratio=169,handout]{beamer}		% handout
+\else	
+	\documentclass[aspectratio=169]{beamer}				% slides with progressions
+\fi
+\usepackage{etex}	% must be loaded to make xy working
+
+\usepackage{alltt}
+\usepackage{array}
+\usepackage{color}
+\usepackage[caption=false]{subfig} % caption = false to let fig number appears
+%\usepackage{caption}
+%\usepackage{subcaption}
+\usepackage{ifthen,calc}
+%\usepackage{multimedia}
+%\usepackage{times,mathptmx}
+
+\usepackage{url}
+\usepackage{xmpmulti}
+\usepackage[xINCLUDENOTES,BIBNAT]{optional} %used with handout mode
+\opt{BIBNAT}{
+\usepackage[round]{natbib} % numbers
+}
+\usepackage[all]{xy}
+\usepackage{amsmath}
+\usepackage{listings}
+
+\usepackage{pdfpages}
+
+%\usetheme{Copenhagen} %% USED in Manet as well
+%\usetheme{AnnArbor}
+%\usetheme{Berkeley}
+
+%\usetheme{default}
+%\usetheme{AnnArbor}
+%\usetheme{Antibes}
+%\usetheme{Bergen}
+%\usetheme{Berkeley}
+%\usetheme{Berlin}
+%\usetheme{Boadilla}
+%\usetheme{CambridgeUS}
+%\usetheme{Copenhagen}
+%\usetheme{Darmstadt}
+%\usetheme{Dresden}
+%\usetheme{Frankfurt}
+%\usetheme{Goettingen}
+%\usetheme{Hannover}
+%\usetheme{Ilmenau}
+%\usetheme{JuanLesPins}
+%\usetheme{Luebeck}
+%\usetheme{Madrid}
+%\usetheme{Malmoe}
+%\usetheme{Marburg}
+%\usetheme{Montpellier}
+%\usetheme{PaloAlto}
+%\usetheme{Pittsburgh}
+%\usetheme{Rochester}
+%\usetheme{Singapore}
+%\usetheme{Szeged}
+%\usetheme{Warsaw}
+
+% As well as themes, the Beamer class has a number of color themes
+% for any slide theme. Uncomment each of these in turn to see how it
+% changes the colors of your current slide theme.
+
+%\usecolortheme{albatross}
+%\usecolortheme{beaver}
+%\usecolortheme{beetle}
+%\usecolortheme{crane}
+%\usecolortheme{dolphin}
+%\usecolortheme{dove}
+%\usecolortheme{fly}
+%\usecolortheme{lily}
+%\usecolortheme{orchid}
+%\usecolortheme{rose}
+%\usecolortheme{seagull}
+%\usecolortheme{seahorse}
+%\usecolortheme{whale}
+%\usecolortheme{wolverine}
+
+\definecolor{LightGray}{gray}{0.95}
+\definecolor{BlueTone}{rgb}{0.25,0.25,0.75}
+\definecolor{DarkSeaGreen}{rgb}{0.50,0.74,0.50}
+
+\definecolor{darkblue}{rgb}{0.25,0.25,0.75}
+
+\setbeamerfont{block title}{size={},series=\bfseries}
+
+\setbeamercolor{background canvas}{bg=white}
+%\setbeamercolor{background canvas}{bg=LightGray}
+%\setbeamercolor{alerted text}{fg=darkblue!80!yellow}
+\setbeamercolor{alerted text}{fg=red,bg=yellow!90!orange}
+\setbeamercolor{block title}{fg=yellow!90!orange,bg=darkblue}
+\setbeamercolor{block title example}{fg=yellow!90!orange,bg=darkblue}
+
+%\usetheme{Rochester}
+%\definecolor{BlueTone}{rgb}{0.25,0.25,0.75}
+%\setbeamercolor{frametitle}{bg=BlueTone}
+
+
+\usetheme{Simple}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%!TEX	CHAPTER SELECTION
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%\input root-par.tex
+\newcommand{\chap}{00}        % Specify the chapter for which produce slides
+%\setboolean{addnotes}{false}     % Uncomment if a booklet for adding notes is required - still Error
+%\setboolean{includeall}{false} % Uncomment if a single booklet with all slides is needed
+
+%\setbeameroption{show notes}
+
+\newcommand{\Notes}{%
+	\setlength{\arrayrulewidth}{0.1pt}
+	\begin{tabular}{p{\textwidth}}\hline
+	\\ \hline \\ \hline	\\ \hline \\ \hline \\ \hline
+	\\ \hline \\ \hline	\\ \hline \\ \hline \\ \hline
+	\\ \hline \\ \hline	\\ \hline \\ \hline \\ \hline
+	\end{tabular}}
+
+\newcommand{\emptybox}[2]{%
+  \raisebox{0pt}[#1]{\makebox[#2]{\hspace*{#2}}}}
+
+\newcommand{\addemptyslide}{\ifthenelse{\boolean{includeall}}{\begin{slide}{}\end{slide}}{}}
+
+\newenvironment{slide}[1]{%
+%\setbeamercolor{frametitle}{bg=yellow!85!orange,fg=darkblue}
+  \begin{frame}{#1}% %% try with framebreaks: not working!!!
+    \setbeamercovered{invisible} }{% CHECKING: transparent, invisible, dynamic
+  \end{frame}
+  \mode<handout>{%
+  \opt{INCLUDENOTES}{  
+  	\setbeamercolor{frametitle}{bg=white}
+  	\addtocounter{framenumber}{-1}
+  	\begin{frame}{}
+    	\Notes
+  	\end{frame}
+  }% end of opt  
+  }% end of ho
+  \setbeamercolor{frametitle}{bg=yellow!85!orange}
+  }
+
+\newcommand{\emptyslide}{%
+%\setbeamercolor{frametitle}{bg=yellow!85!orange}
+  \mode<handout>{%
+  \opt{INCLUDENOTES}{
+  \setbeamercolor{frametitle}{bg=white}
+  \addtocounter{framenumber}{-1}
+  \begin{frame}{}
+    \Notes
+  \end{frame}
+  } %end of opt
+  } %end of ho
+  \setbeamercolor{frametitle}{bg=yellow!85!orange}
+}
+
+\newcommand{\M}[1]{{${#1}$}}
+
+\newcommand{\slidefig}[2][0.83]{%
+	$$\includegraphics[scale=#1]{ch.\chap/#2}$$}
+
+\newenvironment{bulletlist}{%
+	\begin{itemize}\setlength{\itemsep}{3pt}}{%
+	\end{itemize}}
+
+\newenvironment{titlelist}[2]{%
+  \begin{block}{#1}
+    {#2}
+    \begin{itemize}\setlength{\itemsep}{3pt}}{%
+  \end{itemize}\end{block}}
+
+\newenvironment{textlist}[1][xxx]{%
+	\begin{description}[#1]\setlength{\itemsep}{0pt}}{%
+	\end{description}}
+
+\newcommand{\slideset}[1]{ch.#1/ip-slides.#1}
+\newcommand{\includeslides}[1]{%
+  \ifthenelse{\equal{#1}{\chap}}{%
+    \include{\slideset{#1}}}{}}
+
+\newcommand{\assignmentset}[1]{ch.#1/ip-assignment.#1}
+\newcommand{\includeassignment}[1]{%
+  \ifthenelse{\equal{#1}{\chap}}{%
+    \include{\assignmentset{#1}}}{}}
+
+\newcommand{\Red}[1]{{\color{red}#1}}
+\newcommand{\red}[1]{{\color{red}#1}}
+\newcommand{\Blue}[1]{{\color{blue}#1}}
+\newcommand{\blue}[1]{{\color{blue}#1}}
+\newcommand{\green}[1]{{\color{green}#1}}
+
+\definecolor{darkred}{rgb}{0.6,0,0}
+\newcommand{\darkred}[1]{{\color{darkred}#1}}
+
+\newcommand{\PBS}[1]{\let\temp=\\#1\let\\=\temp}
+\newcommand{\RRCOL}{\PBS\raggedright\hspace{0pt}}
+
+\newcommand{\question}[2]{%
+  \begin{exampleblock}{Question}{#1}\end{exampleblock}}
+
+\newcommand{\zeroskip}{\setlength{\parskip}{0pt}}
+\newcommand{\zerosep}{\setlength{\itemsep}{0pt}}
+
+\newenvironment{code}[2][12]{%
+  \fontsize{#1}{#1pt}\selectfont
+  \begin{alltt}}{%
+  \end{alltt}}
+
+%---------------------------------------------------------
+
+\newcommand{\TBD}[1]{\textbf{TBD: #1}}
+
+\newcommand{\newterm}[1]{#1}
+\newcommand{\id}[1]{\mbox{\emph{#1}}}
+\renewcommand{\emph}[1]{{\itshape #1}}
+\newcommand{\ts}[1]{\mbox{\itshape\scriptsize #1}}
+\newcommand{\func}[1]{\mbox{\emph{#1}}}
+
+%----------------------------------------------------------
+
+% Hyperref
+
+%\def\begincolor#1{\special{pdf:bc #1}}%
+%\def\endcolor{\special{pdf:ec}}%
+%\def\colored#1#2{%
+%  \begincolor{#1}#2\endcolor}
+%\def\linkcolor{[0.5 0.0 0.7]}%
+%\def\titlecolor{[.04 .3 .6]}
+%\def\exampcolor{[.8 0.3 0.2]}
+%
+%\def\setlink#1{\colored{\linkcolor}{#1}}%
+%
+%\def\dest#1{\special{pdf:dest (#1) [ @thispage /FitH
+%@ypos ]}}
+%
+%\def\link#1#2{\setbox0\hbox{\setlink{#1}}%
+%  \leavevmode\special{pdf: ann width \the\wd0\space\space height \the\ht0\space\space depth \the\dp0
+%     << /Type /Annot /Subtype /Link /Border [ 0 0 0 ] /A << /S /GoTo
+%     /D (#2) >> >>}\box0\relax}
+
+\newcommand{\mynote}[3]{
+\special{pdf: annotate width #1in height #2pt
+  << /Type /Annot /Subtype /Text /Name /Help
+     /Contents (#3) >>}
+  %  << /Type /Annot /Subtype /FileAttachment /FS
+  %  << /Type /Filespec /FS (command.com) /Dos (transistor.html) /EF
+  %  << /Type /Filespec /Dos (transistor.html)>> >>
+  %  >>}
+  }
+
+\renewcommand{\thepage}{{\hspace{-.0in} \large \copyright\ 
+IPG}
+\hfill \arabic{page}}
+
+\newcommand{\slidefiganim}[3][1,height=0.2\textheight]{%
+	{	\centering
+		\includegraphics<#1>[#2]{ch.\chap/#3}
+	}
+}
+
+\newcommand{\insertfig}[2][height=0.5\textheight]{%
+	\includegraphics[#1]{ch.\chap/#2}}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Notes: 
+%	- topics based on TIT's lectures
+%	- some materials based on poly's lectures
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand{\topicslabel}{}
+\newcommand{\czero}{}%% IPG
+\newcommand{\ci}{Introduction}
+\newcommand{\cii}{Image Formation}
+\newcommand{\ciii}{Basic Operations}
+\newcommand{\civ}{Histogram Equalisation}
+\newcommand{\cv}{Convolution and Fourier Transform}
+\newcommand{\cvi}{Smoothing \& Sharpening}
+\newcommand{\cvii}{Edge Detection}
+\newcommand{\cviii}{Image Segmentation}
+\newcommand{\cix}{Image Compression}
+\newcommand{\cx}{Steganography}
+\newcommand{\cxi}{Fidelity Criteria}
+\newcommand{\cxii}{}
+\newcommand{\cxiii}{}
+\newcommand{\cxiv}{}
+
+
+
+\newtheorem{algorithm}{Algorithm}
+
+%----------------------------------------------------------
+
+\title{Image Processing (TIF356)}% 
+\author{Irwan Prasetya Gunawan, Ph.D}
+\date{}
+\institute{Informatics, Bakrie University\\
+           irwan.gunawan@bakrie.ac.id}
+
+
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{footline}[frame number]
+\setbeamertemplate{caption}[numbered]
+
+
+\begin{document}
+
+\begin{frame}[plain]
+  
+  \titlepage
+
+
+  \begin{center}\Large\color{blue}\vspace*{-36pt}\sloppy
+    \ifthenelse{\equal{00}{\chap}}{\topicslabel 00: \czero\\}{}
+    \ifthenelse{\equal{01}{\chap}}{\topicslabel 01: \ci\\}{}
+    \ifthenelse{\equal{02}{\chap}}{\topicslabel 02: \cii\\}{}
+    \ifthenelse{\equal{03}{\chap}}{\topicslabel 03: \ciii\\}{}
+    \ifthenelse{\equal{04}{\chap}}{\topicslabel 04: \civ\\}{}
+    \ifthenelse{\equal{05}{\chap}}{\topicslabel 05: \cv\\}{}
+    \ifthenelse{\equal{06}{\chap}}{\topicslabel 06: \cvi\\}{}
+    \ifthenelse{\equal{07}{\chap}}{\topicslabel 07: \cvii\\}{}
+    \ifthenelse{\equal{08}{\chap}}{\topicslabel 08: \cviii\\}{}
+    \ifthenelse{\equal{09}{\chap}}{\topicslabel 09: \cix\\}{}
+    \ifthenelse{\equal{10}{\chap}}{\topicslabel 10: \cx\\}{} 
+    \ifthenelse{\equal{11}{\chap}}{\topicslabel 11: \cxi\\}{} 
+%    \ifthenelse{\equal{12}{\chap}}{\topicslabel 12: \cxii\\}{} 
+%    \ifthenelse{\equal{13}{\chap}}{\topicslabel 13: \cxiii\\}{} 
+%    \ifthenelse{\equal{14}{\chap}}{\topicslabel 14: \cxiv\\}{}
+  \end{center}
+
+  \begin{center}
+  \scriptsize
+    \red{Version: \today}
+  \end{center}
+
+%\vspace*{6ex}
+
+\vfill
+
+\begin{center}
+\tiny
+%Prepared for ... \\
+\end{center}
+
+
+  %{\vfill\hfill\includegraphics[width=8cm]{griffon}}
+
+\end{frame}
+
+%\setbeamercolor{frametitle}{bg=yellow!85!orange,fg=BlueTone}
+%\mode<handout>{%
+%\opt{INCLUDENOTES}{%
+%  \setbeamercolor{frametitle}{bg=white}
+%  \addtocounter{framenumber}{-1}
+%  \begin{frame}{}
+%    \Notes
+%  \end{frame}
+%  } %end of opt
+%%  \setbeamercolor{frametitle}{bg=yellow!85!orange}
+%\setbeamercolor{frametitle}{fg=yellow!85!orange,bg=darkblue}
+%} %end of mode
+
+%-----------------------------------------------------------------------
+
+%\ifthenelse{\equal{00}{\chap}}{}{%
+\begin{frame}{Contents}
+
+\begin{center}\small
+  \renewcommand{\arraystretch}{1.1}
+  \begin{tabular}{|l|} \hline
+%    \textbf{\topicslabel} \\ \hline
+    % \ifthenelse{\equal{00}{\chap}}{\Red{00: \czero}} {00: \czero}  \\ \hline
+    \ifthenelse{\equal{01}{\chap}}{\Red{01: \ci}}    {01: \ci}     \\ \hline
+    \ifthenelse{\equal{02}{\chap}}{\Red{02: \cii}}   {02: \cii}    \\ \hline
+    \ifthenelse{\equal{03}{\chap}}{\Red{03: \ciii}}  {03: \ciii}   \\ \hline
+    \ifthenelse{\equal{04}{\chap}}{\Red{04: \civ}}   {04: \civ}    \\ \hline
+    \ifthenelse{\equal{05}{\chap}}{\Red{05: \cv}}    {05: \cv}     \\ \hline
+    \ifthenelse{\equal{06}{\chap}}{\Red{06: \cvi}}   {06: \cvi}    \\ \hline
+    \ifthenelse{\equal{07}{\chap}}{\Red{07: \cvii}}  {07: \cvii}   \\ \hline
+    \ifthenelse{\equal{08}{\chap}}{\Red{08: \cviii}} {08: \cviii}  \\ \hline
+    \ifthenelse{\equal{09}{\chap}}{\Red{09: \cix }}  {09: \cix}    \\ \hline
+    \ifthenelse{\equal{10}{\chap}}{\Red{10: \cx}}    {10: \cx}     \\ \hline
+    \ifthenelse{\equal{11}{\chap}}{\Red{11: \cxi}}   {11: \cxi}    \\ \hline
+%    \ifthenelse{\equal{12}{\chap}}{\Red{12: \cxii}}  {12: \cxii}   \\ \hline
+%    \ifthenelse{\equal{13}{\chap}}{\Red{13: \cxiii}} {13: \cxiii}  \\ \hline
+%    \ifthenelse{\equal{14}{\chap}}{\Red{14: \cxiv}}  {14: \cxiv}   \\ \hline
+  \end{tabular}
+\end{center}
+  
+\end{frame}
+
+
+%\setbeamercolor{frametitle}{bg=yellow!85!orange,fg=BlueTone}
+%\mode<handout>{%
+%\opt{INCLUDENOTES}{%
+%  \setbeamercolor{frametitle}{bg=white}
+%  \addtocounter{framenumber}{-1}
+%  \begin{frame}{}
+%    \Notes
+%  \end{frame}
+%  } %end of opt
+%%  \setbeamercolor{frametitle}{bg=yellow!85!orange}
+%  \setbeamercolor{frametitle}{fg=yellow!85!orange,bg=darkblue}
+%} %end of mode
+
+%}
+
+\includeslides{00}
+\includeslides{01} 
+\includeslides{02} 
+\includeslides{03}
+\includeslides{04}
+\includeslides{05}
+\includeslides{06}
+\includeslides{07}
+\includeslides{08}
+\includeslides{09}
+\includeslides{10}
+\includeslides{11}
+%\includeslides{12}
+%\includeslides{13}
+\includeslides{99}
+
+\includeassignment{01}
+\includeassignment{02}
+
+%%%%%%%%%%%%%%%%%%
+%
+%
+%%%%%%%%%%%%%%%%%%
+\begin{slide}{References}
+\nocite{*}
+\opt{BIBNAT}{
+\def\newblock{}
+\bibliography{dip}
+\bibliographystyle{plainnat}
+} 
+\opt{noBIBNAT}{
+\bibliography{dip}
+\bibliographystyle{plain}
+} %alpha,plain,unsrt,abbrv
+\end{slide}
+
+
+
+\end{document}
